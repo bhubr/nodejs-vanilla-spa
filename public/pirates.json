@@ -1,0 +1,26 @@
+[
+  {
+    "firstName": "Jack",
+    "lastName": "Sparrow",
+    "slug": "jack-sparrow",
+    "text": "Jack Sparrow was a legendary pirate of the Seven Seas, and the irreverent trickster of the Caribbean.",
+    "image": "http://www.pirates-corsaires.com/img4/jack-sparrow.jpg",
+    "thumb": "https://desktopwallpapers.us/wp-content/uploads/2017/05/4K-Jack-Sparrow-in-Pirates-of-The-Caribbean-5-Dead-Men-Tell-No-Tales-320x240.jpg"
+  },
+  {
+    "firstName": "Elizabeth",
+    "lastName": "Swann",
+    "slug": "elizabeth-swann",
+    "text": "Elizabeth Swann was the daughter of Governor Weatherby Swann.",
+    "image": "https://via.placeholder.com/600x800/?text=Elizabeth%20Swann",
+    "thumb": "https://i.pinimg.com/originals/4c/8c/36/4c8c3641a1abb4f6c92a4d8a65c57b54.jpg"
+  },
+  {
+    "firstName": "Will",
+    "lastName": "Turner",
+    "slug": "will-turner",
+    "text": "Will Turner, born William Turner Jr., was the only child of William \"Bootstrap Bill\" Turner.",
+    "image": "https://via.placeholder.com/600x800/?text=Will%20Turner",
+    "thumb": "http://3.bp.blogspot.com/_30PRmkOl4ro/Sj0jmc9mLwI/AAAAAAAARtc/_E7w35Z01QI/s400/orlando05.jpg"
+  }
+]
