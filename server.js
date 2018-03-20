@@ -9,13 +9,18 @@ const html = `
   <head>
     <meta charset="utf-8">
     <title>NodeJS server</title>
+    <link rel="stylesheet" href="bootstrap.min.css" />
   </head>
   <body>
+    <div id="main">
+
+    </div>
+    <script src="page.js"></script>
     <script src="app.js"></script>
   </body>
 </html>`
 
-app.get('/', (req, res) => {
+app.get('*', (req, res) => {
   res.send(html)
   res.end()
 })
