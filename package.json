@@ -4,7 +4,9 @@
   "description": "Example project with NodeJS backend as API",
   "main": "server.js",
   "dependencies": {
-    "express": "^4.16.3"
+    "bluebird": "^3.5.1",
+    "express": "^4.16.3",
+    "sqlite": "^2.9.1"
   },
   "devDependencies": {},
   "scripts": {
