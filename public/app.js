@@ -31,14 +31,31 @@ const controllers = {
     .then(res => res.json())
     .then(pirates => pirates.reduce((carry, pirate) => carry + makeCard(pirate), ''))
     .then(album => render(
-    `<div class="container">
-      <div class="jumbotron">
-        <h1 class="display-3">Hello, world!</h1>
-        <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-        <p><a class="btn btn-primary btn-lg" href="/about" role="button">Learn more »</a></p>
-        <p><a class="btn btn-success btn-lg" href="/users/new" role="button">Add a pirate »</a></p>
+    `
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+      <a class="navbar-brand" href="#">Fixed navbar</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+          </li>
+        </ul>
       </div>
-      <div class="row">${album}</div>
+    </nav>
+    <div class="splash-box">
+      <div class="container">
+        <div class="row search">
+          <div class="col-md-10 input-group input-group-lg">
+            <input class="form-control" />
+          </div>
+          <div class="col-md-2">
+            <input class="btn btn-lg btn-primary" type="submit" value="Search" />
+          </div>
+        </div>
+      </div>
     </div>`)
 
   ),

@@ -1,0 +1,10 @@
+.splash-box {
+  margin-top: 56px;
+  background: url('/marion-michele-191320-unsplash.jpg');
+  background-size: cover;
+  height: 900px;
+}
+
+.splash-box .search {
+  padding-top: 450px;
+}

@@ -31,6 +31,7 @@ const html = `
     <meta charset="utf-8">
     <title>NodeJS server</title>
     <link rel="stylesheet" href="bootstrap.min.css" />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div id="main">
