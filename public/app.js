@@ -24,13 +24,65 @@ const serializeForm = form => {
   return data
 }
 
+let hasMaps = false
+
+function loadMapsIfNeeded(studios) {
+  if(hasMaps) {
+    initMap(studios)
+  }
+  else {
+    loadJS(`https://maps.googleapis.com/maps/api/js?key=${window.mapsKey}&sensor=false`,
+      () => {
+      hasMaps = true
+      initMap(studios)
+    })
+  }
+}
+
+function initMap(studios) {
+  let map;
+  const myLatLng = {lat: 43.597, lng: 1.454}
+
+  console.log('initMap')
+
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: myLatLng,
+    zoom: 8
+  });
+
+  const infoWindows = studios.map(
+    s => new google.maps.InfoWindow({
+      content: `<h1 class="firstHeading">${s.name}</h1><p>${s.description}</p>`
+    })
+  )
+
+  const markers =  studios.map(
+    s => new google.maps.Marker({
+      position: { lat: s.latitude, lng: s.longitude },
+      map,
+      title: s.name
+    })
+  )
+
+  function getListener(i) {
+    return () => infoWindows[i].open(map, markers[i])
+  }
+
+  markers.forEach((m, i) =>
+    m.addListener('click', getListener(i))
+  )
+
+}
+
+
 const controllers = {
 
   '/': () =>
-    fetch('/pirates')
+    fetch('/studios')
     .then(res => res.json())
     .then(pirates => pirates.reduce((carry, pirate) => carry + makeCard(pirate), ''))
-    .then(album => render(
+    .then(album => {
+      render(
     `
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
       <a class="navbar-brand" href="#">Fixed navbar</a>
@@ -40,62 +92,78 @@ const controllers = {
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="/yogis/new">+ <span class="sr-only">(current)</span></a>
           </li>
         </ul>
       </div>
     </nav>
     <div class="splash-box">
       <div class="container">
-        <div class="row search">
-          <div class="col-md-10 input-group input-group-lg">
-            <input class="form-control" />
+
+        <form id="search">
+          <div class="row search">
+            <div class="col-md-10 input-group input-group-lg">
+              <input name="s" class="form-control" />
+            </div>
+            <div class="col-md-2">
+              <input class="btn btn-lg btn-primary" type="submit" value="Search" />
+            </div>
           </div>
-          <div class="col-md-2">
-            <input class="btn btn-lg btn-primary" type="submit" value="Search" />
-          </div>
-        </div>
+        </form>
       </div>
-    </div>`)
+    </div><div id="map"></div>`)
 
-  ),
+    const form = document.getElementById('search')
+    form.addEventListener('submit', e => {
+      e.preventDefault()
+      const data = serializeForm(form)
+      console.log(data)
 
-  '/users/new': () => {
+      fetch('/studios')
+      .then(res => res.json())
+      .then(studios => {
+
+        $('#map').height(600)
+        loadMapsIfNeeded(studios)
+
+      })
+    })
+
+
+  }),
+
+  '/yogis/new': () => {
     render(
-    `<div class="container">
-      <div id="alert-box" class="hidden">
+      `<div class="container">
+        <div id="alert-box" class="hidden">
 
-      </div>
-      <form id="add-pirate">
-        <div class="form-group">
-          <label for="inputFirstName">First name</label>
-          <input name="firstName" type="text" class="form-control" id="inputFirstName" placeholder="Enter first name">
         </div>
-        <div class="form-group">
-          <label for="inputLastName">Last name</label>
-          <input name="lastName" type="text" class="form-control" id="inputLastName" placeholder="Enter last name">
-        </div>
-        <div class="form-group">
-          <label for="inputImageUrl">Image URL</label>
-          <input name="image" type="text" class="form-control" id="inputImageUrl" placeholder="Enter image URL">
-        </div>
-        <div class="form-group">
-          <label for="inputBio">Bio</label>
-          <textarea name="bio" class="form-control" id="inputLastName" placeholder="Bio"></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
-    </div>`
-  )
+        <form id="add-pirate">
+          <div class="form-group">
+            <label for="inputName">Nom</label>
+            <input name="name" type="text" class="form-control" id="inputName" placeholder="Enter studio name">
+          </div>
+          <div class="form-group">
+            <label for="inputAddress">Address</label>
+            <input name="address" type="text" class="form-control" id="inputAddress" placeholder="Enter address">
+          </div>
+          <div class="form-group">
+            <label for="inputCity">City</label>
+            <input name="city" type="text" class="form-control" id="inputCity" placeholder="Enter city">
+          </div>
+          <div class="form-group">
+            <label for="inputDescription">Bio</label>
+            <textarea name="description" class="form-control" id="inputDescription" placeholder="Description"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>`
+    )
     const form = document.getElementById('add-pirate')
     form.addEventListener('submit', e => {
       e.preventDefault()
       const data = serializeForm(form)
-      if(! data.image) {
-        const fullName = encodeURIComponent(`${data.firstName} ${data.lastName}`)
-        data.image = `https://via.placeholder.com/640x480/?text=${fullName}`
-      }
-      fetch('/pirates', {
+      fetch('/studios', {
         method: 'POST',
         headers: {
           'Accept': 'application/json, text/plain, */*',
@@ -104,10 +172,10 @@ const controllers = {
         body: JSON.stringify(data)
       })
       .then(res => res.json())
-      .then(pirate => {
+      .then(studio => {
         const alertBox = document.getElementById('alert-box')
         alertBox.className = 'alert alert-success'
-        alertBox.innerHTML = `Successfully created pirate ${pirate.firstName} (${pirate.id})`
+        alertBox.innerHTML = `Successfully created studio ${studio.name} (${studio.id})`
       })
     })
   },
@@ -151,7 +219,7 @@ const route = pathname => {
 
 (() => {
 
-  ['/', '/about', '/users/new', '/users/:slug', '*'].forEach(
+  ['/', '/about', '/yogis/new', '/users/:slug', '*'].forEach(
     path => page(path, controllers[path])
   )
   page()
