@@ -65,7 +65,7 @@ const dbPromise = Promise.resolve()
 .then(() => sqlite.open('./database.sqlite', { Promise }))
 .then(_db => {
   db = _db
-  // return db.migrate({ force: 'last' })
+  return db.migrate({ force: 'last' })
 })
 // .then(() => Promise.map(usersSeed, u => insertUser(u)))
 
